@@ -64,14 +64,13 @@ class _GamePlayScreenState extends State<GamePlayScreen> {
             tapEnable = false;
           });
           return;
-        }else{
-          if(gamePlayCode.checkDraw()){
-            showDialog(
-                context: context,
-                builder: (context) => ResultDialog(message: "Draw !"));
-          }
         }
       }
+    }
+    if(gamePlayCode.checkDraw()){
+      showDialog(
+          context: context,
+          builder: (context) => ResultDialog(message: "Draw !"));
     }
   }
 
@@ -109,14 +108,13 @@ class _GamePlayScreenState extends State<GamePlayScreen> {
             tapEnable = false;
           });
           return;
-        }else{
-          if(gamePlayCode.checkDraw()){
-            showDialog(
-                context: context,
-                builder: (context) => ResultDialog(message: "Draw !"));
-          }
         }
       }
+    }
+    if(gamePlayCode.checkDraw()){
+      showDialog(
+          context: context,
+          builder: (context) => ResultDialog(message: "Draw !"));
     }
   }
 

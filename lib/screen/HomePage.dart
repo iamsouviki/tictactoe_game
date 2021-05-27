@@ -11,7 +11,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Future<bool> willpop()async{
-    return true;
+    return false;
   }
 
   @override
@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
           leading: Container(),
           centerTitle: true,
           title: Text(
-            "Tic Tac Toe",
+            "Tic  Tac  Toe",
             style: TextStyle(color: Colors.white),
           ),
           shadowColor: Colors.black,
@@ -67,18 +67,6 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 SizedBox(height: 20,),
-                TextButton(
-                  onPressed: () {
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 8,horizontal: 12),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text("Previous Score",style: TextStyle(color: Colors.white,),),
-                  ),
-                ),
                 SizedBox(height: 20,),
                 TextButton(
                   onPressed: () {},
