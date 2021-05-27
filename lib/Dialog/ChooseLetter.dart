@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:tictactoe/Game/GamePlayCode.dart';
+import 'package:tictactoe/ToastAdapter.dart';
 import 'package:tictactoe/screen/GameplayScreen.dart';
 
 class ChooseLetter extends StatefulWidget {
@@ -46,50 +47,54 @@ class _ChooseLetterState extends State<ChooseLetter> {
             ? Row(
                 children: [
                   Expanded(
-                    child: Container(
-                      margin:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                      child: Row(
-                        children: [
-                          Radio(
-                              activeColor: Colors.red,
-                              value: "X",
-                              groupValue: groupValue,
-                              onChanged: (value) {
-                                setState(() {
-                                  groupValue = value.toString();
-                                  playerValue = "X";
-                                });
-                              }),
-                          Text(
-                            "  X",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ],
+                    child: FittedBox(
+                      child: Container(
+                        margin:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                        child: Row(
+                          children: [
+                            Radio(
+                                activeColor: Colors.red,
+                                value: "X",
+                                groupValue: groupValue,
+                                onChanged: (value) {
+                                  setState(() {
+                                    groupValue = value.toString();
+                                    playerValue = "X";
+                                  });
+                                }),
+                            Text(
+                              "  X",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                   Expanded(
-                    child: Container(
-                      margin:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                      child: Row(
-                        children: [
-                          Radio(
-                              activeColor: Colors.red,
-                              value: "O",
-                              groupValue: groupValue,
-                              onChanged: (value) {
-                                setState(() {
-                                  groupValue = value.toString();
-                                  playerValue = "O";
-                                });
-                              }),
-                          Text(
-                            "  O",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ],
+                    child: FittedBox(
+                      child: Container(
+                        margin:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                        child: Row(
+                          children: [
+                            Radio(
+                                activeColor: Colors.red,
+                                value: "O",
+                                groupValue: groupValue,
+                                onChanged: (value) {
+                                  setState(() {
+                                    groupValue = value.toString();
+                                    playerValue = "O";
+                                  });
+                                }),
+                            Text(
+                              "  O",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -155,6 +160,14 @@ class _ChooseLetterState extends State<ChooseLetter> {
           child: Center(
             child: TextButton(
               onPressed: () {
+                if(groupValue==''){
+                  ToastAdapter().on200("Please Select a Letter");
+                  return;
+                }
+                if(groupValueToss=='' && !buttonText){
+                  ToastAdapter().on200("Please Select Head/Tail");
+                  return;
+                }
                 String bot;
                 if (groupValue == 'X') {
                   bot = 'O';

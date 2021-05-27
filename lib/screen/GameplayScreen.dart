@@ -205,136 +205,146 @@ class _GamePlayScreenState extends State<GamePlayScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height < 600
+        ? 600
+        : MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width < 280
+        ? 280
+        : MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Container(
-        height: height,
-        width: width,
-        child: Column(
-          children: [
-            (widget.gameType == 'computer')
-                ? Container(
-                    margin: EdgeInsets.symmetric(vertical: 30),
-                    child: Text(
-                      "You are Playing as " + widget.player,
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                  )
-                : Container(
-                    margin: EdgeInsets.symmetric(vertical: 30),
-                    child: Column(
-                      children: [
-                        Text(
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Container(
+            height: height,
+            width: width,
+            child: Column(
+              children: [
+                (widget.gameType == 'computer')
+                    ? Container(
+                        margin: EdgeInsets.symmetric(vertical: 30),
+                        child: Text(
                           "You are Playing as " + widget.player,
                           style: TextStyle(
                               color: Colors.white, fontWeight: FontWeight.bold),
                         ),
-                        Text(
-                          "Your Friend is Playing as " + widget.bot,
+                      )
+                    : Container(
+                        margin: EdgeInsets.symmetric(vertical: 30),
+                        child: Column(
+                          children: [
+                            Text(
+                              "You are Playing as " + widget.player,
+                              style: TextStyle(
+                                  color: Colors.white, fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              "Your Friend is Playing as " + widget.bot,
+                              style: TextStyle(
+                                  color: Colors.white, fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      ),
+                (widget.gameType == 'computer')
+                    ? Container(
+                        margin: EdgeInsets.only(bottom: 80),
+                        child: Text(
+                          widget.botFirst ? "You Lose Toss" : "You Win Toss",
                           style: TextStyle(
                               color: Colors.white, fontWeight: FontWeight.bold),
                         ),
-                      ],
+                      )
+                    : Container(
+                        margin: EdgeInsets.only(bottom: 20),
+                        child: Text(
+                          widget.botFirst ? "Your Friend win Toss" : "You Win Toss",
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                (widget.gameType == 'computer')
+                    ? Container()
+                    : Container(
+                        margin: EdgeInsets.only(bottom: 40),
+                        child: Text(
+                          move + " Move",
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                Container(
+                  height: height * 0.6,
+                  margin: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+                  child: GridView.builder(
+                    itemCount: 9,
+                    shrinkWrap: true,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      mainAxisExtent: (height * 0.5) / 3,
                     ),
-                  ),
-            (widget.gameType == 'computer')
-                ? Container(
-                    margin: EdgeInsets.only(bottom: 80),
-                    child: Text(
-                      widget.botFirst ? "You Lose Toss" : "You Win Toss",
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                  )
-                : Container(
-                    margin: EdgeInsets.only(bottom: 20),
-                    child: Text(
-                      widget.botFirst ? "Your Friend win Toss" : "You Win Toss",
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-            (widget.gameType == 'computer')
-                ? Container()
-                : Container(
-                    margin: EdgeInsets.only(bottom: 40),
-                    child: Text(
-                      move + " Move",
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-            Container(
-              height: height * 0.6,
-              margin: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-              child: GridView.builder(
-                itemCount: 9,
-                shrinkWrap: true,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  mainAxisExtent: (height * 0.5) / 3,
-                ),
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      if (tapEnable) {
-                        (widget.gameType == 'computer')
-                            ? _handleTap(index + 1)
-                            : _handleTapfriend(index + 1);
-                      }
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          if (tapEnable) {
+                            (widget.gameType == 'computer')
+                                ? _handleTap(index + 1)
+                                : _handleTapfriend(index + 1);
+                          }
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.all(0.0),
+                          decoration:
+                              BoxDecoration(border: _determineBorder(index)),
+                          child: Center(
+                              child: Text(
+                                  gamePlayCode.board[index + 1] == null
+                                      ? ""
+                                      : gamePlayCode.board[index + 1].toString(),
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold))),
+                        ),
+                      );
                     },
-                    child: Container(
-                      margin: const EdgeInsets.all(0.0),
-                      decoration:
-                          BoxDecoration(border: _determineBorder(index)),
-                      child: Center(
-                          child: Text(
-                              gamePlayCode.board[index + 1] == null
-                                  ? ""
-                                  : gamePlayCode.board[index + 1].toString(),
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold))),
-                    ),
-                  );
-                },
-              ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: ConfettiWidget(
+                    confettiController: _controllerCenter,
+                    blastDirectionality: BlastDirectionality
+                        .explosive, // don't specify a direction, blast randomly
+                    shouldLoop:
+                        false, // start again as soon as the animation is finished
+                    colors: const [
+                      Colors.green,
+                      Colors.blue,
+                      Colors.pink,
+                      Colors.orange,
+                      Colors.purple
+                    ], // manually specify the colors to be used
+                    createParticlePath: drawStar, // define a custom shape/path.
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: ConfettiWidget(
+                    confettiController: _controllerBottomCenter,
+                    blastDirection: -pi / 2,
+                    emissionFrequency: 0.01,
+                    numberOfParticles: 20,
+                    maxBlastForce: 100,
+                    minBlastForce: 80,
+                    gravity: 0.3,
+                  ),
+                ),
+              ],
             ),
-            Align(
-              alignment: Alignment.center,
-              child: ConfettiWidget(
-                confettiController: _controllerCenter,
-                blastDirectionality: BlastDirectionality
-                    .explosive, // don't specify a direction, blast randomly
-                shouldLoop:
-                    false, // start again as soon as the animation is finished
-                colors: const [
-                  Colors.green,
-                  Colors.blue,
-                  Colors.pink,
-                  Colors.orange,
-                  Colors.purple
-                ], // manually specify the colors to be used
-                createParticlePath: drawStar, // define a custom shape/path.
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: ConfettiWidget(
-                confettiController: _controllerBottomCenter,
-                blastDirection: -pi / 2,
-                emissionFrequency: 0.01,
-                numberOfParticles: 20,
-                maxBlastForce: 100,
-                minBlastForce: 80,
-                gravity: 0.3,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
