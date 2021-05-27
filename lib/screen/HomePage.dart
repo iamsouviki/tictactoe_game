@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tictactoe/Dialog/ChooseLetter.dart';
+import 'package:tictactoe/screen/About.dart';
 import 'package:tictactoe/screen/GameplayScreen.dart';
 
 class HomePage extends StatefulWidget {
@@ -67,9 +68,10 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 SizedBox(height: 20,),
-                SizedBox(height: 20,),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>About()));
+                  },
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 8,horizontal: 12),
                     decoration: BoxDecoration(

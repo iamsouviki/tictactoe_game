@@ -162,8 +162,6 @@ class _ChooseLetterState extends State<ChooseLetter> {
                   bot = 'X';
                 }
                 int cho = Random().nextInt(2);
-                print(cho);
-                print(groupValueToss);
                 if ((cho == 0 && groupValueToss == "Head") ||
                     (cho == 1 && groupValueToss == 'Tail')) {
                   setState(() {

@@ -35,13 +35,17 @@ class _SplashScreenState extends State<SplashScreen> {
               Text(
                 "Tic\nTac\nToe",
                 style: TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.bold, fontSize: 40),
+                    color: Colors.white, fontWeight: FontWeight.bold, fontSize: 50),
               ),
-              Text(
-                "\n\n\n\n\nby Souvik",
-                style: TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Text(
+                  "by Souvik",
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
+                ),
               ),
+
             ],
           ),
         ),

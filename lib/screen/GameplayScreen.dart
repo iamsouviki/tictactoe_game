@@ -39,11 +39,8 @@ class _GamePlayScreenState extends State<GamePlayScreen> {
     setState(() {
       gamePlayCode.playerMove(index);
     });
-    //if (gamePlayCode.checkDraw()) {
-    //}
     if (gamePlayCode.checkforWin()) {
       if (gamePlayCode.checkWhichMarkWon(widget.bot)) {
-        print('bot win');
         showDialog(
             context: context,
             builder: (context) => ResultDialog(message: "You Lose"));
@@ -54,7 +51,6 @@ class _GamePlayScreenState extends State<GamePlayScreen> {
         return;
       } else {
         if (gamePlayCode.checkWhichMarkWon(widget.player)) {
-          print('player win');
           _controllerCenter.play();
           _controllerBottomCenter.play();
           showDialog(
