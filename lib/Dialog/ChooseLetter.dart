@@ -34,7 +34,7 @@ class _ChooseLetterState extends State<ChooseLetter> {
               ),
             )
           : Text(
-              "Toss For First Who Take Move",
+              "Toss For Who Takes First Move",
               style: TextStyle(
                 color: Colors.white,
               ),
