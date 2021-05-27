@@ -3,6 +3,7 @@ import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tictactoe/Dialog/ChooseLetter.dart';
+import 'package:tictactoe/Dialog/ResultDialog.dart';
 import 'package:tictactoe/Game/GamePlayCode.dart';
 
 class GamePlayScreen extends StatefulWidget {
@@ -46,6 +47,7 @@ class _GamePlayScreenState extends State<GamePlayScreen> {
     if (gamePlayCode.checkforWin()) {
       if (gamePlayCode.checkWhichMarkWon(widget.bot)) {
         print('bot win');
+        showDialog(context: context, builder: (context)=>ResultDialog(message: "You Lose"));
         setState(() {
           tapEnable = false;
         });
@@ -54,6 +56,7 @@ class _GamePlayScreenState extends State<GamePlayScreen> {
           print('player win');
           _controllerCenter.play();
           _controllerBottomCenter.play();
+          showDialog(context: context, builder: (context)=>ResultDialog(message: "You Win"));
           setState(() {
             tapEnable = false;
           });
