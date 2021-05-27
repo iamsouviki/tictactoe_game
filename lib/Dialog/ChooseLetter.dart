@@ -191,7 +191,7 @@ class _ChooseLetterState extends State<ChooseLetter> {
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: Text(
-                  buttonText ? "  Next  " : "   Start   ",
+                  buttonText ? "  Next  " : "   Start  ",
                   style: TextStyle(
                     color: Colors.white,
                   ),

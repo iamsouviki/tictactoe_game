@@ -48,6 +48,7 @@ class _GamePlayScreenState extends State<GamePlayScreen> {
       if (gamePlayCode.checkWhichMarkWon(widget.bot)) {
         print('bot win');
         showDialog(context: context, builder: (context)=>ResultDialog(message: "You Lose"));
+
         setState(() {
           tapEnable = false;
         });
