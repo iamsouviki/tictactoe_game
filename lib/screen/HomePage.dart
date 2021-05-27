@@ -54,6 +54,7 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(height: 20,),
                 TextButton(
                   onPressed: () {
+                    showDialog(context: context, builder: (context)=>ChooseLetter(gameType: 'friend',));
                     //Navigator.push(context, MaterialPageRoute(builder: (context)=>GamePlayScreen(gameType: 'friend')));
                   },
                   child: Container(
@@ -67,7 +68,8 @@ class _HomePageState extends State<HomePage> {
                 ),
                 SizedBox(height: 20,),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                  },
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 8,horizontal: 12),
                     decoration: BoxDecoration(

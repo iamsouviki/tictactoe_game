@@ -28,6 +28,7 @@ class _GamePlayScreenState extends State<GamePlayScreen> {
   late ConfettiController _controllerBottomCenter;
   String playerSymbol = "";
   bool tapEnable = true;
+  late String move;
 
   GamePlayCode gamePlayCode = new GamePlayCode();
 
@@ -39,7 +40,6 @@ class _GamePlayScreenState extends State<GamePlayScreen> {
       gamePlayCode.playerMove(index);
     });
     if (gamePlayCode.checkDraw()) {
-      print('draw');
       setState(() {
         //tapEnable=false;
       });
@@ -47,7 +47,9 @@ class _GamePlayScreenState extends State<GamePlayScreen> {
     if (gamePlayCode.checkforWin()) {
       if (gamePlayCode.checkWhichMarkWon(widget.bot)) {
         print('bot win');
-        showDialog(context: context, builder: (context)=>ResultDialog(message: "You Lose"));
+        showDialog(
+            context: context,
+            builder: (context) => ResultDialog(message: "You Lose"));
 
         setState(() {
           tapEnable = false;
@@ -57,7 +59,46 @@ class _GamePlayScreenState extends State<GamePlayScreen> {
           print('player win');
           _controllerCenter.play();
           _controllerBottomCenter.play();
-          showDialog(context: context, builder: (context)=>ResultDialog(message: "You Win"));
+          showDialog(
+              context: context,
+              builder: (context) => ResultDialog(message: "You Win"));
+          setState(() {
+            tapEnable = false;
+          });
+        }
+      }
+    }
+  }
+
+  void _handleTapfriend(int index) {
+    setState(() {
+      if(move == "Your "){
+        gamePlayCode.playerMoveFriends(widget.player, index);
+        move ="Your Friend's";
+      }else{
+        if(move =="Your Friend's"){
+          gamePlayCode.playerMoveFriends(widget.bot, index);
+          move = "Your ";
+        }
+      }
+    });
+    if (gamePlayCode.checkforWin()) {
+      if (gamePlayCode.checkWhichMarkWon(widget.bot)) {
+        _controllerCenter.play();
+        _controllerBottomCenter.play();
+        showDialog(
+            context: context,
+            builder: (context) => ResultDialog(message: "Your Friend Win"));
+        setState(() {
+          tapEnable = false;
+        });
+      } else {
+        if (gamePlayCode.checkWhichMarkWon(widget.player)) {
+          _controllerCenter.play();
+          _controllerBottomCenter.play();
+          showDialog(
+              context: context,
+              builder: (context) => ResultDialog(message: "You Win"));
           setState(() {
             tapEnable = false;
           });
@@ -135,11 +176,22 @@ class _GamePlayScreenState extends State<GamePlayScreen> {
 
   @override
   void initState() {
-    _controllerCenter = ConfettiController(duration: const Duration(seconds: 10));
-    _controllerBottomCenter = ConfettiController(duration: const Duration(seconds: 10));
+    _controllerCenter =
+        ConfettiController(duration: const Duration(seconds: 10));
+    _controllerBottomCenter =
+        ConfettiController(duration: const Duration(seconds: 10));
     gamePlayCode.initLetter(widget.bot, widget.player);
     if (widget.botFirst) {
-      gamePlayCode.insertletter(widget.bot, Random().nextInt(9) + 1);
+      if((widget.gameType == 'computer')) {
+        gamePlayCode.insertletter(widget.bot, Random().nextInt(9) + 1);
+      }
+      setState(() {
+        move = "Your Friend's";
+      });
+    } else {
+      setState(() {
+        move = "Your ";
+      });
     }
     super.initState();
   }
@@ -155,24 +207,59 @@ class _GamePlayScreenState extends State<GamePlayScreen> {
         width: width,
         child: Column(
           children: [
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 30),
-              child: Text(
-                "You are Playing as " + widget.player,
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              ),
-            ),
             (widget.gameType == 'computer')
                 ? Container(
-              margin: EdgeInsets.only(bottom: 80),
+                    margin: EdgeInsets.symmetric(vertical: 30),
+                    child: Text(
+                      "You are Playing as " + widget.player,
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  )
+                : Container(
+                    margin: EdgeInsets.symmetric(vertical: 30),
+                    child: Column(
+                      children: [
+                        Text(
+                          "You are Playing as " + widget.player,
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          "Your Friend is Playing as " + widget.bot,
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+            (widget.gameType == 'computer')
+                ? Container(
+                    margin: EdgeInsets.only(bottom: 80),
                     child: Text(
                       widget.botFirst ? "You Lose Toss" : "You Win Toss",
                       style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold),
                     ),
                   )
-                : Container(),
+                : Container(
+                    margin: EdgeInsets.only(bottom: 20),
+                    child: Text(
+                      widget.botFirst ? "Your Friend win Toss" : "You Win Toss",
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+            (widget.gameType == 'computer')
+                ? Container()
+                : Container(
+                    margin: EdgeInsets.only(bottom: 40),
+                    child: Text(
+                      move + " Move",
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ),
             Container(
               height: height * 0.6,
               margin: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
@@ -187,7 +274,9 @@ class _GamePlayScreenState extends State<GamePlayScreen> {
                   return GestureDetector(
                     onTap: () {
                       if (tapEnable) {
-                        _handleTap(index + 1);
+                        (widget.gameType == 'computer')
+                            ? _handleTap(index + 1)
+                            : _handleTapfriend(index + 1);
                       }
                     },
                     child: Container(
@@ -214,7 +303,8 @@ class _GamePlayScreenState extends State<GamePlayScreen> {
                 confettiController: _controllerCenter,
                 blastDirectionality: BlastDirectionality
                     .explosive, // don't specify a direction, blast randomly
-                shouldLoop:false, // start again as soon as the animation is finished
+                shouldLoop:
+                    false, // start again as soon as the animation is finished
                 colors: const [
                   Colors.green,
                   Colors.blue,
