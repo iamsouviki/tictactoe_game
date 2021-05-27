@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:tictactoe/Game/GamePlayCode.dart';
 import 'package:tictactoe/screen/GameplayScreen.dart';
 
 class ChooseLetter extends StatefulWidget {
-  const ChooseLetter({Key? key}) : super(key: key);
+  final String gameType;
+  const ChooseLetter({Key? key,required this.gameType}) : super(key: key);
 
   @override
   _ChooseLetterState createState() => _ChooseLetterState();
@@ -14,6 +17,7 @@ class _ChooseLetterState extends State<ChooseLetter> {
   String groupValueToss = "";
   String playerValue = "";
   bool buttonText = true;
+  bool botFirst = true ;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +33,7 @@ class _ChooseLetterState extends State<ChooseLetter> {
           color: Colors.white,
         ),
       ):Text(
-        "Choose One",
+        "Toss For who Go first",
         style: TextStyle(
           color: Colors.white,
         ),
@@ -91,46 +95,50 @@ class _ChooseLetterState extends State<ChooseLetter> {
         : Row(
           children: [
             Expanded(
-              child: Container(
-                margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                child: Row(
-                  children: [
-                    Radio(
-                        activeColor: Colors.red,
-                        value: "Head",
-                        groupValue: groupValueToss,
-                        onChanged: (value) {
-                          setState(() {
-                            groupValueToss = value.toString();
-                          });
-                        }),
-                    Text(
-                      "  Tail",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ],
+              child: FittedBox(
+                child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  child: Row(
+                    children: [
+                      Radio(
+                          activeColor: Colors.red,
+                          value: "Head",
+                          groupValue: groupValueToss,
+                          onChanged: (value) {
+                            setState(() {
+                              groupValueToss = value.toString();
+                            });
+                          }),
+                      Text(
+                        "  Head",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
             Expanded(
-              child: Container(
-                margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                child: Row(
-                  children: [
-                    Radio(
-                        activeColor: Colors.red,
-                        value: "Tail",
-                        groupValue: groupValueToss,
-                        onChanged: (value) {
-                          setState(() {
-                            groupValueToss = value.toString();
-                          });
-                        }),
-                    Text(
-                      "  Tail",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ],
+              child: FittedBox(
+                child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  child: Row(
+                    children: [
+                      Radio(
+                          activeColor: Colors.red,
+                          value: "Tail",
+                          groupValue: groupValueToss,
+                          onChanged: (value) {
+                            setState(() {
+                              groupValueToss = value.toString();
+                            });
+                          }),
+                      Text(
+                        "  Tail",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -139,7 +147,6 @@ class _ChooseLetterState extends State<ChooseLetter> {
       ),
       actions: [
         Container(
-          width: 100,
           child: Center(
             child: TextButton(
               onPressed: () {
@@ -149,14 +156,23 @@ class _ChooseLetterState extends State<ChooseLetter> {
                 } else {
                   bot = 'X';
                 }
+                int cho=Random().nextInt(2);
+                print(cho);
+                print(groupValueToss);
+                if((cho==0 && groupValueToss=="Head") || (cho==1 && groupValueToss=='Tail')){
+                  setState(() {
+                    botFirst=false;
+                  });
+                }
                 if(!buttonText){
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => GamePlayScreen(
-                            gameType: 'computer',
+                            gameType: widget.gameType,
                             player: groupValue,
                             bot: bot,
+                            botFirst: botFirst,
                           )));
                 }
                 setState(() {

@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               TextButton(
                 onPressed: () {
-                  showDialog(context: context, builder: (context)=>ChooseLetter());
+                  showDialog(context: context, builder: (context)=>ChooseLetter(gameType: 'computer',));
                 },
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: 8,horizontal: 12),
@@ -43,6 +43,7 @@ class _HomePageState extends State<HomePage> {
                   child: Text("Play With Computer",style: TextStyle(color: Colors.white,),),
                 ),
               ),
+              SizedBox(height: 20,),
               TextButton(
                 onPressed: () {
                   //Navigator.push(context, MaterialPageRoute(builder: (context)=>GamePlayScreen(gameType: 'friend')));
@@ -56,6 +57,7 @@ class _HomePageState extends State<HomePage> {
                   child: Text("Play With Friend",style: TextStyle(color: Colors.white,),),
                 ),
               ),
+              SizedBox(height: 20,),
               TextButton(
                 onPressed: () {},
                 child: Container(
@@ -67,6 +69,7 @@ class _HomePageState extends State<HomePage> {
                   child: Text("Previous Score",style: TextStyle(color: Colors.white,),),
                 ),
               ),
+              SizedBox(height: 20,),
               TextButton(
                 onPressed: () {},
                 child: Container(

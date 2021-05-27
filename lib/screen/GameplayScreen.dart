@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tictactoe/Dialog/ChooseLetter.dart';
@@ -9,9 +9,13 @@ class GamePlayScreen extends StatefulWidget {
   final String gameType;
   final String bot;
   final String player;
+  final bool botFirst;
   const GamePlayScreen({
     Key? key,
-    required this.gameType, required this.bot, required this.player,
+    required this.gameType,
+    required this.bot,
+    required this.player,
+    required this.botFirst,
   }) : super(key: key);
 
   @override
@@ -19,8 +23,8 @@ class GamePlayScreen extends StatefulWidget {
 }
 
 class _GamePlayScreenState extends State<GamePlayScreen> {
-  // late String bot;
-  // late String player ;
+  late ConfettiController _controllerCenter;
+  late ConfettiController _controllerBottomCenter;
   String playerSymbol = "";
   bool tapEnable = true;
 
@@ -48,6 +52,8 @@ class _GamePlayScreenState extends State<GamePlayScreen> {
       } else {
         if (gamePlayCode.checkWhichMarkWon(widget.player)) {
           print('player win');
+          _controllerCenter.play();
+          _controllerBottomCenter.play();
           setState(() {
             tapEnable = false;
           });
@@ -56,7 +62,6 @@ class _GamePlayScreenState extends State<GamePlayScreen> {
     }
   }
 
-  /// Returns a border to draw depending on this field index.
   Border _determineBorder(index) {
     Border determinedBorder = Border.all();
 
@@ -101,10 +106,37 @@ class _GamePlayScreenState extends State<GamePlayScreen> {
     return determinedBorder;
   }
 
+  Path drawStar(Size size) {
+    double degToRad(double deg) => deg * (pi / 180.0);
+
+    const numberOfPoints = 5;
+    final halfWidth = size.width / 2;
+    final externalRadius = halfWidth;
+    final internalRadius = halfWidth / 2.5;
+    final degreesPerStep = degToRad(360 / numberOfPoints);
+    final halfDegreesPerStep = degreesPerStep / 2;
+    final path = Path();
+    final fullAngle = degToRad(360);
+    path.moveTo(size.width, halfWidth);
+
+    for (double step = 0; step < fullAngle; step += degreesPerStep) {
+      path.lineTo(halfWidth + externalRadius * cos(step),
+          halfWidth + externalRadius * sin(step));
+      path.lineTo(halfWidth + internalRadius * cos(step + halfDegreesPerStep),
+          halfWidth + internalRadius * sin(step + halfDegreesPerStep));
+    }
+    path.close();
+    return path;
+  }
+
   @override
   void initState() {
+    _controllerCenter = ConfettiController(duration: const Duration(seconds: 10));
+    _controllerBottomCenter = ConfettiController(duration: const Duration(seconds: 10));
     gamePlayCode.initLetter(widget.bot, widget.player);
-    gamePlayCode.insertletter(widget.bot, Random().nextInt(9) + 1);
+    if (widget.botFirst) {
+      gamePlayCode.insertletter(widget.bot, Random().nextInt(9) + 1);
+    }
     super.initState();
   }
 
@@ -122,11 +154,21 @@ class _GamePlayScreenState extends State<GamePlayScreen> {
             Container(
               margin: EdgeInsets.symmetric(vertical: 30),
               child: Text(
-                "You are Playing as "+widget.player,
+                "You are Playing as " + widget.player,
                 style:
                     TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
+            (widget.gameType == 'computer')
+                ? Container(
+              margin: EdgeInsets.only(bottom: 80),
+                    child: Text(
+                      widget.botFirst ? "You Lose Toss" : "You Win Toss",
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  )
+                : Container(),
             Container(
               height: height * 0.6,
               margin: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
@@ -160,6 +202,35 @@ class _GamePlayScreenState extends State<GamePlayScreen> {
                     ),
                   );
                 },
+              ),
+            ),
+            Align(
+              alignment: Alignment.center,
+              child: ConfettiWidget(
+                confettiController: _controllerCenter,
+                blastDirectionality: BlastDirectionality
+                    .explosive, // don't specify a direction, blast randomly
+                shouldLoop:false, // start again as soon as the animation is finished
+                colors: const [
+                  Colors.green,
+                  Colors.blue,
+                  Colors.pink,
+                  Colors.orange,
+                  Colors.purple
+                ], // manually specify the colors to be used
+                createParticlePath: drawStar, // define a custom shape/path.
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: ConfettiWidget(
+                confettiController: _controllerBottomCenter,
+                blastDirection: -pi / 2,
+                emissionFrequency: 0.01,
+                numberOfParticles: 20,
+                maxBlastForce: 100,
+                minBlastForce: 80,
+                gravity: 0.3,
               ),
             ),
           ],
