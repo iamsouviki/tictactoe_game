@@ -39,11 +39,8 @@ class _GamePlayScreenState extends State<GamePlayScreen> {
     setState(() {
       gamePlayCode.playerMove(index);
     });
-    if (gamePlayCode.checkDraw()) {
-      setState(() {
-        //tapEnable=false;
-      });
-    }
+    //if (gamePlayCode.checkDraw()) {
+    //}
     if (gamePlayCode.checkforWin()) {
       if (gamePlayCode.checkWhichMarkWon(widget.bot)) {
         print('bot win');
@@ -54,6 +51,7 @@ class _GamePlayScreenState extends State<GamePlayScreen> {
         setState(() {
           tapEnable = false;
         });
+        return;
       } else {
         if (gamePlayCode.checkWhichMarkWon(widget.player)) {
           print('player win');
@@ -65,8 +63,14 @@ class _GamePlayScreenState extends State<GamePlayScreen> {
           setState(() {
             tapEnable = false;
           });
+          return;
         }
       }
+    }
+    if(gamePlayCode.checkDraw()){
+      showDialog(
+          context: context,
+          builder: (context) => ResultDialog(message: "Draw !"));
     }
   }
 
@@ -92,6 +96,7 @@ class _GamePlayScreenState extends State<GamePlayScreen> {
         setState(() {
           tapEnable = false;
         });
+        return;
       } else {
         if (gamePlayCode.checkWhichMarkWon(widget.player)) {
           _controllerCenter.play();
@@ -102,6 +107,13 @@ class _GamePlayScreenState extends State<GamePlayScreen> {
           setState(() {
             tapEnable = false;
           });
+          return;
+        }else{
+          if(gamePlayCode.checkDraw()){
+            showDialog(
+                context: context,
+                builder: (context) => ResultDialog(message: "Draw !"));
+          }
         }
       }
     }

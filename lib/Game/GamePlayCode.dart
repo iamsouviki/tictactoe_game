@@ -98,11 +98,10 @@ class GamePlayCode {
   checkDraw(){
     for(int i=1;i<10;i++){
       if(board[i]==' '){
-        print('false'+board[i].toString());
         return false;
       }
-      return true;
     }
+    return true;
   }
 
   playerMove(int position){
